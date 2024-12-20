@@ -31,7 +31,7 @@ public class Player extends Entity{
 
     public void update(){
         //Stops character jiggle
-//        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
+        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
             if(keyH.upPressed){
                 direction = "up";
                 y -= speed;
@@ -53,7 +53,7 @@ public class Player extends Entity{
                 spriteNum = (spriteNum%2)+1;
                 spriteCounter = 0;
             }
-//        }
+        }
     }
 
     public void draw(Graphics2D g2) {

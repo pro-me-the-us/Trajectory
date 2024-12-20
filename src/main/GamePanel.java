@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import tiles.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,23 +11,20 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTileSize = 16; //16x16 tiles i.e size of player
     final int scale = 3;
     public final int tileSize = originalTileSize*scale; //Actual tile size
-    final int maxScreenCol= 16;
-    final int maxScreenRow = 12;
-    final int screenWidth = tileSize*maxScreenCol; //768 pixels
-    final int screenHeight = tileSize*maxScreenRow; //576 pixels
+    public final int maxScreenCol= 16;
+    public final int maxScreenRow = 12;
+    public final int screenWidth = tileSize*maxScreenCol; //768 pixels
+    public final int screenHeight = tileSize*maxScreenRow; //576 pixels
 
     //FPS
     final int FPS  = 60;
 
     KeyHandler keyH = new KeyHandler();
+    TileManager tileM = new TileManager(this);
 
     Thread gameThread;
     //Set player default position
     Player player = new Player(this,keyH);
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
-
 
 
     public void startGameThread(){
@@ -94,15 +92,14 @@ public class GamePanel extends JPanel implements Runnable{
     public void update(){
         player.update();
     }
-
-    public void paintComponent(Graphics g){
+public
+    void paintComponent(Graphics g){
 
         super.paintComponent(g); //Required to print graphics
 
         Graphics2D g2 = (Graphics2D)g; //Converting graphics to 2D for better control over geometry.
-
-        player.draw(g2);
-
+        tileM.draw(g2); //Tiles like a layer should be placed first
+        player.draw(g2);//else will hide player
         g2.dispose(); // Dispose of graphics context and release any system resources that it takes.
 
     }
