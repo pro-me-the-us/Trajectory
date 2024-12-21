@@ -18,8 +18,8 @@ public class TileManager {
     public TileManager(GamePanel gp){
         this.gp = gp;
         tile = new Tile[10];
-        mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow]; //Stores map data
-        loadMap("/maps/Map.txt");
+        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow]; //Stores map data
+        loadMap("/maps/world.txt");
         getTileImage();
     }
 
@@ -30,10 +30,10 @@ public class TileManager {
 
             int col =0;
             int row =0 ;
-            while(col < gp.maxScreenCol && row < gp.maxScreenRow){
+            while(col < gp.maxWorldCol && row < gp.maxWorldRow){
                 String line = br.readLine(); //Stores whole line
                 String numbers[] = line.split(" ");
-                while(col < gp.maxScreenCol){
+                while(col < gp.maxWorldCol){
                     mapTileNum[col][row] = Integer.parseInt(numbers[col]);
                     col++;
                 }
@@ -72,21 +72,26 @@ public class TileManager {
     }
 
     public void draw(Graphics2D g2){
-       int col=0;
-       int row=0;
-       int x = 0;
-       int y = 0;
+       int worldCol=0;
+       int worldRow=0;
 
-       while(col < gp.maxScreenCol && row < gp.maxScreenRow){
-           g2.drawImage(tile[mapTileNum[col][row]].image,x,y,gp.tileSize,gp.tileSize,null);
-           col++;
-           x +=gp.tileSize;
+       while(worldCol < gp.maxWorldCol && worldRow< gp.maxWorldRow){
+           int worldX = worldCol*gp.tileSize;
+           int worldY = worldRow*gp.tileSize;
+           int screenX = worldX - gp.player.worldX + gp.player.screenX; //Offsetting location of tile wrt player in screen
+           int screenY = worldY - gp.player.worldY+ gp.player.screenY;
 
-           if(col == gp.maxScreenCol){
-               col = 0;
-               x=0;
-               row++;
-               y +=gp.tileSize;
+           if(     worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+                   worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+                   worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+                   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
+               g2.drawImage(tile[mapTileNum[worldCol][worldRow]].image,screenX,screenY,gp.tileSize,gp.tileSize,null);
+           } //Creating rendering distance
+           worldCol++;
+
+           if(worldCol == gp.maxWorldCol){
+               worldCol = 0;
+               worldRow++;
            }
        }
     }
