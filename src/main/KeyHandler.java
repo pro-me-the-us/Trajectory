@@ -4,7 +4,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
-    public boolean upPressed, downPressed, leftPressed,rightPressed;
+    public boolean upPressed, downPressed, leftPressed,rightPressed, spacePressed;
+    public GamePanel gp;
+
+    public KeyHandler(GamePanel gp){
+        this.gp = gp;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -14,6 +19,23 @@ public class KeyHandler implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+
+        if(gp.gameState == gp.titleState){
+            if(code == KeyEvent.VK_ENTER){
+                gp.gameState = gp.playState;
+            }
+        }else if(gp.gameState == gp.winState){
+            if(code == KeyEvent.VK_ENTER){
+                gp.resetGame();
+                gp.gameState = gp.playState;
+            }
+        }else if(gp.gameState == gp.deadState){
+            if(code == KeyEvent.VK_ENTER){
+                gp.resetGame();
+                gp.gameState = gp.playState;
+            }
+        }
+
         if(code == KeyEvent.VK_W){
             upPressed = true;
         }
@@ -25,6 +47,9 @@ public class KeyHandler implements KeyListener{
         }
         if(code == KeyEvent.VK_D){
             rightPressed = true;
+        }
+        if(code == KeyEvent.VK_SPACE){
+            spacePressed = true;
         }
     }
 
@@ -42,6 +67,9 @@ public class KeyHandler implements KeyListener{
         }
         if(code == KeyEvent.VK_D){
             rightPressed = false;
+        }
+        if(code == KeyEvent.VK_SPACE){
+            spacePressed = false;
         }
     }
 }

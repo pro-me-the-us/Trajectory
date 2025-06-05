@@ -1,5 +1,6 @@
 package main;
 
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class  Main {
+public class Main {
+
     public static void main(String[] args) throws IOException {
         JFrame window = new JFrame();
         window.setIconImage(ImageIO.read(Objects.requireNonNull(Main.class.getResourceAsStream("/Player/belo_1.png"))));
@@ -16,6 +18,9 @@ public class  Main {
         window.setTitle("Trajectory");
 
         GamePanel gamePanel = new GamePanel();
+        MapGenerator mapGen = new MapGenerator(gamePanel);
+        mapGen.pathGenerate();
+
         window.add(gamePanel);
 
         window.pack(); //Window sized to fit gamePanel
@@ -23,6 +28,7 @@ public class  Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        gamePanel.setupGame();
         gamePanel.startGameThread();
 
     }
